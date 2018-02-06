@@ -16,7 +16,7 @@ message BuildReq {
     string handlerName = 1;
 }
 
-service metricEntryService {
+service AdapterService {
     rpc  SetAdapterConfig(SetAdapterConfigReq) returns (google.rpc.Status);
     rpc  Validate(ValidateReq) returns (google.rpc.Status);
     rpc  Build(BuildReq) returns (google.rpc.Status);

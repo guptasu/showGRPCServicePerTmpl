@@ -57,6 +57,7 @@ message Resource1InstanceParam {
 /* template based gRPC Service */
 service MetricEntryService {
     // NOTE all other methods are defined in template agnostic service
+    // istio.mixer.adapter.model.v1beta.AdapterService
     rpc HandleMetricEntry(HandleMetricEntryReq) returns (google.rpc.Status)
     rpc SetHandleMetricEntryTypes(SetMetricEntryTypeReq) returns (google.rpc.Status)
 }
@@ -95,7 +96,6 @@ message HandleListEntryRes {
     istio.mixer.adapter.model.v1beta.CheckResult result = 2;
 }
 service QuotaService {
-    // NOTE all other methods are defined in template agnostic service
     rpc HandleQuota(HandleQuotaReq) returns (HandleQuotaRes)
     rpc SetHandleQuotaTypes(SetQuotaTypeReq) returns (google.rpc.Status)
 }
