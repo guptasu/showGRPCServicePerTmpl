@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+// Template agnostic service interface.
+package istio.mixer.adapter.model.v1beta;
+
+
+message SetAdapterConfigReq {
+    map<string, google.protobuf.Value> allHandlerConfigsByName = 1;
+}
+
+message ValidateReq {
+    string handlerName = 1;
+}
+
+message BuildReq {
+    string handlerName = 1;
+}
+
+service metricEntryService {
+    rpc  SetAdapterConfig(SetAdapterConfigReq) returns (google.rpc.Status);
+    rpc  Validate(ValidateReq) returns (google.rpc.Status);
+    rpc  Build(BuildReq) returns (google.rpc.Status);
+}
+
