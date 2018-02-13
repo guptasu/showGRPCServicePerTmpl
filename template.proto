@@ -1,0 +1,19 @@
+package istio.mixer.adapter.metricEntry;
+
+option (istio.mixer.v1.template.template_variety) = TEMPLATE_VARIETY_REPORT;
+
+message Template {
+    istio.mixer.v1.template.Value value = 1;
+    map<string, istio.mixer.v1.template.Value> dimensions = 2;
+    Resource1 res1 = 3;
+
+    int64 int64Primitive = 4;
+    bool boolPrimitive = 5;
+    double doublePrimitive = 6;
+    string stringPrimitive = 7;
+}
+
+message Resource1 {
+    istio.mixer.v1.template.Value value = 1;
+    map<string, istio.mixer.v1.template.Value> dimensions = 2;
+}

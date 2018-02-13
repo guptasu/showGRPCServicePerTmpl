@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+// Template agnostic service interface.
+package istio.mixer.adapter.model.v1beta;
+
+message SetAdapterConfigRequest {
+    string builder_id = 1;
+    google.protobuf.Value adapterConfig = 2;
+}
+
+message ValidateRequest {
+    string builder_id = 1;
+}
+
+message BuildRequest {
+    string builder_id = 1;
+}
+
+message NewBuilderResult {
+    string builder_id = 1;
+}
+
+message BuildResult {
+    string handler_id = 1;
+    google.rpc.Status status = 2;
+}
+
+message CloseRequest {
+    string handler_id = 1;
+}
+
+service AdapterService {
+    rpc  NewBuilder() returns (NewBuilderResult);
+    rpc  SetAdapterConfig(SetAdapterConfigRequest) returns (google.rpc.Status);
+    rpc  Validate(ValidateRequest) returns (google.rpc.Status);
+    rpc  Build(BuildRequest) returns (BuildResult);
+    rpc  Close(CloseRequest) returns (google.rpc.Status);
+}
+

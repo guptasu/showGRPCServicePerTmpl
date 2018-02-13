@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+package istio.mixer.adapter.metricentry;
+
+import "mixer/v1/template/extensions.proto";
+import "mixer/v1/template/standard_types.proto";
+import "mixer/v1/config/descriptor/value_type.proto";
+
+option (istio.mixer.v1.template.template_variety) = TEMPLATE_VARIETY_REPORT;
+
+
+/*--Types --*/
+message Type {
+    istio.mixer.v1.config.descriptor.ValueType value = 1;
+    map<string, istio.mixer.v1.config.descriptor.ValueType> dimensions = 2;
+    Resource1Type res1 = 3;
+}
+
+message Resource1Type {
+    istio.mixer.v1.config.descriptor.ValueType value = 1;
+    map<string, istio.mixer.v1.config.descriptor.ValueType> dimensions = 2;
+}
+
+/*-- Instance --*/
+message Instance {
+    google.protobuf.Value value = 1;
+    map<string, google.protobuf.Value> dimensions = 2;
+    Resource1Type res1 = 3;
+
+    int64 Int64Primitive = 4;
+    bool BoolPrimitive = 5;
+    double DoublePrimitive = 6;
+    string StringPrimitive  = 7;
+}
+
+message Resource1 {
+    google.protobuf.Value value = 1;
+    map<string, google.protobuf.Value> dimensions = 2;
+}
+
+/*-- InstanceParam (stringified template to load yaml) --*/
+message InstanceParam {
+    string value = 1;
+    map<string, string> dimensions = 2;
+    Resource1InstanceParam res1 = 3;
+
+    string int64Primitive = 4;
+    string boolPrimitive = 5;
+    string doublePrimitive = 6;
+}
+message Resource1InstanceParam {
+    string value = 1;
+    map<string, string> dimensions = 2;
+}
+
+
+/* template based gRPC Service */
+service MetricEntryService {
+    // NOTE all other methods are defined in template agnostic service
+    // istio.mixer.adapter.model.v1beta.AdapterService
+    rpc HandleMetricEntry(HandleMetricEntryRequest) returns (google.rpc.Status)
+    rpc SetHandleMetricEntryTypes(SetMetricEntryTypeRequest) returns (google.rpc.Status)
+}
+
+message HandleMetricEntryRequest {
+    string handler_id = 1;
+    repeated Instance instance = 2;
+
+    // NOTE: We might have to use the below instead of direct Instance message.
+    // Deserializing this should be trivial.
+    //repeated byte instanceAsbytes = 2;
+}
+
+message SetMetricEntryTypeRequest {
+    string builder_id = 1;
+    map<string, Type> MapInstNameToInferredTypesAsAny =2;
+    // NOTE: We might have to use the below instead of direct Type message.
+    // Deserializing this should be trivial.
+    // map<string, bytes> MapInstNameToInferredTypesAsAny =2;
+}
+
+/////////////////////////////// Additional Check, Quota templates /////////////////////////////////////////
+
+// Similarly for Check and Quota templates, the service would look like:
+
+service ListEntryService {
+    rpc HandleListEntry(HandleListEntryReq) returns (google.rpc.Status)
+    rpc SetHandleListEntryTypes(SetListEntryTypeReq) returns (google.rpc.Status)
+}
+message HandleListEntryReq {
+    string handler_id = 1;
+    Instance instance = 2;
+}
+message HandleListEntryRes {
+    google.rpc.Status status = 1;
+    istio.mixer.adapter.model.v1beta.CheckResult result = 2;
+}
+service QuotaService {
+    rpc HandleQuota(HandleQuotaReq) returns (HandleQuotaRes)
+    rpc SetHandleQuotaTypes(SetQuotaTypeReq) returns (google.rpc.Status)
+}
+message HandleQuotaReq {
+    string handler_id = 1;
+    Instance instance = 2;
+    istio.mixer.adapter.model.v1beta.QuotaArgs args = 3;
+}
+message HandleQuotaRes {
+    google.rpc.Status status = 1;
+    istio.mixer.adapter.model.v1beta.QuotaResult result = 2;
+}

@@ -1,0 +1,19 @@
+package istio.mixer.adapter.model.v1beta;
+
+message QuotaArgs {
+    string DeduplicationID = 1;
+    int64  QuotaAmount =2;
+    bool BestEffort = 3;
+}
+
+message QuotaResult {
+    google.rpc.Status Status = 1;
+    google.protobuf.Duration ValidDuration = 2;
+    int64 Amount = 3;
+}
+
+message CheckResult {
+    google.rpc.Status Status = 1;
+    google.protobuf.Duration ValidDuration = 2;
+    int64 Amount = 3;
+}
