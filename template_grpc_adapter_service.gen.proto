@@ -58,12 +58,12 @@ message Resource1InstanceParam {
 service MetricEntryService {
     // NOTE all other methods are defined in template agnostic service
     // istio.mixer.adapter.model.v1beta.AdapterService
-    rpc HandleMetricEntry(HandleMetricEntryReq) returns (google.rpc.Status)
-    rpc SetHandleMetricEntryTypes(SetMetricEntryTypeReq) returns (google.rpc.Status)
+    rpc HandleMetricEntry(HandleMetricEntryRequest) returns (google.rpc.Status)
+    rpc SetHandleMetricEntryTypes(SetMetricEntryTypeRequest) returns (google.rpc.Status)
 }
 
-message HandleMetricEntryReq {
-    string handlerName = 1;
+message HandleMetricEntryRequest {
+    string handler_id = 1;
     repeated Instance instance = 2;
 
     // NOTE: We might have to use the below instead of direct Instance message.
@@ -71,8 +71,8 @@ message HandleMetricEntryReq {
     //repeated byte instanceAsbytes = 2;
 }
 
-message SetMetricEntryTypeReq {
-    string handlerName = 1;
+message SetMetricEntryTypeRequest {
+    string builder_id = 1;
     map<string, Type> MapInstNameToInferredTypesAsAny =2;
     // NOTE: We might have to use the below instead of direct Type message.
     // Deserializing this should be trivial.
@@ -88,7 +88,7 @@ service ListEntryService {
     rpc SetHandleListEntryTypes(SetListEntryTypeReq) returns (google.rpc.Status)
 }
 message HandleListEntryReq {
-    string handlerName = 1;
+    string handler_id = 1;
     Instance instance = 2;
 }
 message HandleListEntryRes {
@@ -100,7 +100,7 @@ service QuotaService {
     rpc SetHandleQuotaTypes(SetQuotaTypeReq) returns (google.rpc.Status)
 }
 message HandleQuotaReq {
-    string handlerName = 1;
+    string handler_id = 1;
     Instance instance = 2;
     istio.mixer.adapter.model.v1beta.QuotaArgs args = 3;
 }
